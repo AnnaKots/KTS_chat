@@ -1,0 +1,133 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background: white;
+    font-family: Roboto, sans-serif;
+    font-weight: 400;
+}
+
+.chat {
+    height: calc(100% - 60px - 50px);
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.message {
+    padding: 20px;
+    background: white;
+    font-size: 12px;
+    transition: background 0.2s linear;
+}
+
+.message__author {
+    margin-bottom: 10px;
+}
+
+.message__avatar {
+    display: inline-block;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: url('avatar.png') no-repeat center;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+.message__time {
+    float: right;
+    color: #b2b2b2;
+    line-height: 30px;
+}
+
+.message__text {
+
+}
+
+.message__name {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.message:hover {
+    background: #f1f1f1;
+}
+
+.input {
+    height: 60px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.input__attach {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    background: url('attach.ico') no-repeat center;
+    background-size: contain;
+    margin-right: 10px;
+    margin-left: 30px;
+}
+
+input {
+    outline: none;
+    border: none;
+    width: calc(100% - 70px - 50px);
+}
+
+.input__send {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    background: url('send.png') no-repeat center;
+    background-size: contain;
+    margin-left: 10px;
+}
+
+.btn {
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: white;
+}
+
+header {
+    width: 100%;
+    background: #4099FF;
+    height: 50px;
+}
+
+h1 {
+    margin: 10px;
+    color: white;
+    font-size: 20px;
+	float: left;
+}
+
+.logout{
+    background-color: #4099FF;
+    color: white;
+    border-radius: 0%;
+    float: right;
+    font-size: 20px;
+}
+
+.btn-primary{
+    background-color: #4099FF;
+    width: 100%;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.btn-primary2{
+    background-color: #00AF00;
+    width: 100%;
+    border-radius: 5px;
+    margin: 5px;
+    color: white;
+}
