@@ -2,8 +2,9 @@ from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView, CreateView, FormView
@@ -17,9 +18,31 @@ class ChatView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data['messages'] = Message.objects.all().order_by('-id')
+        last_id = self.request.GET.get('last_id')
+
+        if last_id:
+            messages = Message.objects.filter(id__gt=last_id).order_by('-id')[:20]
+        else:
+            messages = Message.objects.all().order_by('-id')
+
+        data['messages'] = messages
         return data
-# Create your views here.
+
+
+class MessagesView(LoginRequiredMixin, TemplateView):
+    template_name = 'chat/messages.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        last_id = self.request.GET.get('last_id')
+
+        if last_id:
+            messages = Message.objects.filter(id__gt=last_id).order_by('-id')[:20]
+        else:
+            messages = Message.objects.all().order_by('-id')
+
+        data['messages'] = messages
+        return data
 
 
 class MyLoginView(View):
@@ -71,16 +94,28 @@ class ChatLoginView(LoginView):
 class MessageCreateView(CreateView):
     form_class = MessageCreateForm
 
+    def get(self, request, *args, **kwargs):
+        return HttpResponseNotAllowed(['post'])
+
     def get_success_url(self):
         return reverse('chat_get')
+
+    def form_valid(self, form):  # Бекенд к chat.js
+        super().form_valid(form)
+        return JsonResponse({
+            'id': self.object.id,
+            'text': self.object.text,
+            'author': self.object.author.username,
+            'date': self.object.date,
+            'renderedTemplate': render_to_string('chat/message.html',
+                                                 {'message': self.object},
+                                                 self.request)
+        })
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
-
-    def get(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['post'])
 
     def form_invalid(self, form):
         return HttpResponseBadRequest(reverse('chat_get'))

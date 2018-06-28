@@ -9,6 +9,9 @@
     <a class="logout btn" href="{% url "logout" %}">Выход</a>
     <!--создали ссылочку-->
     </header>
+    <script src="{% static "core/js/jquery-3.3.1.min.js" %}"></script>
+    <script src="{% static "core/js/setup.js" %}"></script>
+    <script src="{% static "core/js/chat.js" %}"></script>
     <div class="chat">
         {% for m in messages %}
             {% include "chat/message.html" with message=m %}
